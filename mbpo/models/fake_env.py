@@ -30,7 +30,7 @@ class FakeEnv:
 
         return log_prob, stds
 
-    def step(self, obs, act, deterministic=False):
+    def step(self, obs, act, terminals=None, deterministic=False):
         assert len(obs.shape) == len(act.shape)
         if len(obs.shape) == 1:
             obs = obs[None]
@@ -61,7 +61,8 @@ class FakeEnv:
         log_prob, dev = self._get_logprob(samples, ensemble_model_means, ensemble_model_vars)
 
         rewards, next_obs = samples[:,:1], samples[:,1:]
-        terminals = self.config.termination_fn(obs, act, next_obs)
+        if terminals is None:
+            terminals = self.config.termination_fn(obs, act, next_obs)
 
         batch_size = model_means.shape[0]
         return_means = np.concatenate((model_means[:,:1], terminals, model_means[:,1:]), axis=-1)

@@ -221,7 +221,7 @@ class MBPO(RLAlgorithm):
                         self._epoch, self._model_train_freq, self._timestep, self._total_timestep, self._train_steps_this_epoch, self._num_train_steps)
                     )
 
-                    model_train_metrics = self._train_model(batch_size=256, max_epochs=None, holdout_ratio=0.2, max_t=self._max_model_t)
+                    model_train_metrics = self._train_model(batch_size=256, max_epochs=250, holdout_ratio=0.2, max_t=self._max_model_t)
                     model_metrics.update(model_train_metrics)
                     gt.stamp('epoch_train_model')
                     
@@ -388,7 +388,7 @@ class MBPO(RLAlgorithm):
         for i in range(self._rollout_length):
             act = self._policy.actions_np(obs)
             
-            next_obs, rew, term, info = self.fake_env.step(obs, act, **kwargs)
+            next_obs, rew, term, info = self.fake_env.step(obs, act, batch['terminals'], **kwargs)
             steps_added.append(len(obs))
 
             samples = {'observations': obs, 'actions': act, 'next_observations': next_obs, 'rewards': rew, 'terminals': term}

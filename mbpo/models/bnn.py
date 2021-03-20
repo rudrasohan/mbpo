@@ -246,7 +246,7 @@ class BNN:
             current = holdout_losses[i]
             _, best = self._snapshots[i]
             improvement = (best - current) / best
-            if improvement > 0.01:
+            if improvement > 0.001:
                 self._snapshots[i] = (epoch, current)
                 self._save_state(i)
                 updated = True
@@ -300,7 +300,7 @@ class BNN:
     #################
 
     def train(self, inputs, targets,
-              batch_size=32, max_epochs=None, max_epochs_since_update=5,
+              batch_size=32, max_epochs=250, max_epochs_since_update=5,
               hide_progress=False, holdout_ratio=0.0, max_logging=5000, max_grad_updates=None, timer=None, max_t=None):
         """Trains/Continues network training
 
@@ -396,6 +396,8 @@ class BNN:
             progress.update()
             t = time.time() - t0
             if break_train or (max_grad_updates and grad_updates > max_grad_updates):
+                descr = '############Breaking because of {}'.format(epoch)
+                progress.append_description(descr)
                 break
             if max_t and t > max_t:
                 descr = 'Breaking because of timeout: {}! (max: {})'.format(t, max_t)

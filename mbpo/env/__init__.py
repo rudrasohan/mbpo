@@ -1,4 +1,5 @@
 import gym
+import mbpo.env.safety_gym_registery
 
 MBPO_ENVIRONMENT_SPECS = (
 	{
@@ -8,6 +9,10 @@ MBPO_ENVIRONMENT_SPECS = (
 	{
         'id': 'HumanoidTruncatedObs-v2',
         'entry_point': (f'mbpo.env.humanoid:HumanoidTruncatedObsEnv'),
+    },
+    {
+        'id': 'SafetyPointEnv-v0',
+        'entry_point': (f'mbpo.env.safety-point:SafetyPointEnv'),
     },
 )
 
